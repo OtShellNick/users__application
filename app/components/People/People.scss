@@ -1,0 +1,18 @@
+.user {
+
+  &__photo {
+    width: 220px;
+    height: 118px;
+    object-fit: cover;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+
+  &__content {
+    padding: 5px;
+
+    &_name {
+      font-size: 15px;
+    }
+  }
+}

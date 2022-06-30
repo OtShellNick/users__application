@@ -1,0 +1,11 @@
+.account {
+  width: 100vw;
+  max-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__form-wrapper {
+    max-width: 250px;
+  }
+}

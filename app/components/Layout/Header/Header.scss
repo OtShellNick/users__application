@@ -1,0 +1,22 @@
+.header {
+
+  &__list {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+
+    &__item {
+
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  &__ava {
+    width: 40px;
+    border-radius: 50%;
+    height: 40px;
+    object-fit: cover;
+  }
+}
