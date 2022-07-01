@@ -129,7 +129,6 @@ const FormUpdate = () => {
                         color='neutral'
                         name="gender"
                         label="Gender"
-                        style={{display: 'none'}}
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values.gender}

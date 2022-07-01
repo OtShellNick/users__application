@@ -7,6 +7,7 @@ import * as CookieHelper from '@helpers/cookie';
 import '@style/main.scss';
 
 import Layout from "@components/Layout/Layout";
+import NotFound from "@components/NotFound/NotFound";
 
 const Login = lazy(() => import('@components/Login/Login'));
 const Account = lazy(() => import('@components/Account/Account'));
@@ -28,7 +29,7 @@ const App = () => {
                 <Route path='account' element={<Account/>}/>
             </Route>
             <Route path='/login' element={<Login/>}/>
-
+        <Route path='*' element={<NotFound/>}/>
         </Routes>
 }
 
