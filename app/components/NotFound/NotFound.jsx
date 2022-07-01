@@ -1,7 +1,5 @@
 import React from "react";
 
-import NotFoundIcon from '@assets/not-found.svg?jsx';
-
 import './NotFound.scss';
 
 const NotFound = () => {
