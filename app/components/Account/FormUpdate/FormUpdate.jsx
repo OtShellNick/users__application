@@ -9,11 +9,14 @@ import {AdapterMoment} from "@mui/x-date-pickers/AdapterMoment";
 import {toBase64} from "@helpers/fileConvert";
 import * as yup from "yup";
 import {userUpdate} from "@actions/users";
+import moment from "moment";
+import {checkAuth} from "@helpers/checkAuth";
 
 const FormUpdate = () => {
     const {user, setUser} = useContext(UserContext);
     const fileInput = useRef(null);
     const [error, setError] = useState('');
+    moment.locale('ru');
 
     const theme = createTheme({
         status: {
@@ -33,16 +36,19 @@ const FormUpdate = () => {
     });
 
     if(user.name) return <Formik
-        initialValues={{...user, newPassword: ''}}
+        initialValues={{...user, newPassword: '', newPhoto: null}}
         validationSchema={yup.object().shape({
             name: yup.string().min(3, 'Name must be minimum 3 character'),
             email: yup.string().email('Enter a valid email'),
             newPassword: yup.string(),
             birthday: yup.string().nullable(),
             gender: yup.string(),
-            photo: yup.string().nullable()
+            newPhoto: yup.string().nullable()
         })}
         onSubmit={async (values, { setSubmitting }) => {
+            if(!values.newPassword) delete values.newPassword;
+            if(!values.newPhoto) delete values.newPhoto;
+
             try {
                 setSubmitting(true);
                 setError('');
@@ -50,6 +56,7 @@ const FormUpdate = () => {
 
                 setUser(user);
             } catch (e) {
+                checkAuth(e);
                 const {response} = e;
                 if(response.data) setError(response.data.error);
             } finally {
@@ -86,6 +93,7 @@ const FormUpdate = () => {
                     <TextField
                         size="small"
                         fullWidth
+                        style={{display: 'none'}}
                         id="outlined-required"
                         color='neutral'
                         type='email'
@@ -104,8 +112,8 @@ const FormUpdate = () => {
                         id="outlined-required"
                         color='neutral'
                         type='password'
-                        name="password"
-                        label="Password"
+                        name="newPassword"
+                        label="New Password"
                         onBlur={handleBlur}
                         onChange={handleChange}
                         defaultValue={values.password}
@@ -158,7 +166,7 @@ const FormUpdate = () => {
                                 if (event.target.files) {
                                     try {
                                         const result = await toBase64(event.target.files[0]);
-                                        setFieldValue('photo', result)
+                                        setFieldValue('newPhoto', result)
                                     } catch (error) {
                                         console.error(error);
                                     }
@@ -169,7 +177,7 @@ const FormUpdate = () => {
                     </Button>
                 </ThemeProvider>
                 {error && <FormHelperText error>{error}</FormHelperText>}
-                <Button color="error" variant="outlined" type="submit" disabled={isSubmitting}>Register</Button>
+                <Button color="error" variant="outlined" type="submit" disabled={isSubmitting}>Update</Button>
             </form>
         }}
     </Formik>

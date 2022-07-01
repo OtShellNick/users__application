@@ -11,3 +11,5 @@ export const getAllUsers = () => Server('get', '/users/all');
 export const getSelf = () => Server('get', `/users/self`);
 
 export const userUpdate = (data) => Server('post', '/users/update', data);
+
+export const getUserPhoto = id => Server('get', `/users/photo/${id}`);

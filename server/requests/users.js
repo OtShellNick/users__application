@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const {validate} = require("../validation");
-const {findUserByEmail, createUser, createSession, hash, deleteSession, auth, getAllUsers, updateUser} = require("../actions/usersActions");
+const {findUserByEmail, createUser, createSession, hash, deleteSession, auth, getAllUsers, updateUser, getPhoto} = require("../actions/usersActions");
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.post('/signup', bodyParser.urlencoded({extended: false}), async (req, res
     try {
         const user = await findUserByEmail(email);
 
-        if (user) return res.status(409).send({error: 'Username is already exists'});
+        if (user) return res.status(409).send({error: 'Email is already exists'});
 
         const newUser = await createUser({name, email, password, gender, birthday, photo});
 
@@ -76,10 +76,10 @@ router.get('/self', auth(), async (req, res) => {
 });
 
 router.post('/update', auth(), bodyParser.urlencoded({extended: false}), async (req, res) => {
-    const {name, email, newPassword, birthday, photo, gender} = req.body;
+    const userForUpdate = req.body;
 
     try {
-        const user = await updateUser({name, email, newPassword, birthday, photo, gender});
+        const user = await updateUser(userForUpdate);
 
         delete user._id;
         delete user.password;
@@ -90,5 +90,12 @@ router.post('/update', auth(), bodyParser.urlencoded({extended: false}), async (
         res.status(500).send({error: 'Internal Server Error'})
     }
 });
+
+router.get('/photo/:id', async (req, res) => {
+    const {id} = req.params;
+
+    const photo = await getPhoto(id);
+    res.send(photo);
+})
 
 module.exports = router;

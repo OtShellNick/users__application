@@ -45,7 +45,7 @@ const LoginForm = () => {
             try {
 
                 const {appSessionId} = await login(values);
-                console.log(appSessionId)
+
                 CookieHelper.set('appSessionId', appSessionId);
                 navigate('/');
 

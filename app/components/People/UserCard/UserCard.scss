@@ -1,0 +1,33 @@
+@import "@style/main.scss";
+
+.card {
+  width: 255px;
+  border: 1px solid darken($main_background_color, 15%);
+  border-radius: 10px;
+  box-shadow: 0 5px 24px 3px darken($main_background_color, 25%);
+  background-color: transparent;
+
+  &__photo {
+    width: 255px;
+    height: 118px;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  &__heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+
+  &__text {
+    font-size: 14px;
+    font-weight: 400;
+    color: lighten($main_text_color, 10%);
+  }
+
+  &__content {
+    padding: 10px;
+  }
+}

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --mode development",
     "server": "node ./server/server.js",
+    "server:dev": "nodemon ./server/server.js",
     "all": "concurrently \"npm run server\" \"npm run dev\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

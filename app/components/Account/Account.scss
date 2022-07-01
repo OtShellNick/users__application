@@ -1,11 +1,18 @@
+@import "@style/main.scss";
+
 .account {
   width: 100vw;
-  max-height: 100vh;
+  height: 90vh;
   display: flex;
   justify-content: center;
   align-items: center;
 
   &__form-wrapper {
-    max-width: 250px;
+    max-width: 350px;
+    padding: 10px;
+    border: 1px solid darken($main_background_color, 15%);
+    border-radius: 10px;
+    box-shadow: 0 5px 24px 3px darken($main_background_color, 17%);
+    background-color: transparent;
   }
 }

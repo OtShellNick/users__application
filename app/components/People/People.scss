@@ -1,4 +1,11 @@
-.user {
+.users {
+  display: flex;
+  flex-wrap: wrap;
+   & > div {
+     flex: 0 220px;
+     margin-right: 13px;
+     margin-bottom: 13px;
+   }
 
   &__photo {
     width: 220px;

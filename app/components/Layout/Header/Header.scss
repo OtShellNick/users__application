@@ -1,4 +1,7 @@
+@import "@style/main.scss";
+
 .header {
+  margin-bottom: 25px;
 
   &__list {
     display: flex;
@@ -9,6 +12,24 @@
 
       &:not(:last-child) {
         margin-right: 10px;
+      }
+
+      &__link {
+        text-decoration: none;
+        color: $main_text_color;
+        transition: all 0.3s ease 0s;
+
+        &:hover {
+          color: lighten($main_text_color, 25%)
+        }
+
+        &-active {
+          margin: 0 20px;
+          padding: 9px 25px;
+          background-color: darken($main_background_color, 20%);
+          border: none;
+          border-radius: 50px;
+        }
       }
     }
   }

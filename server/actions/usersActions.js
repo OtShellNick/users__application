@@ -20,19 +20,23 @@ const auth = () => async (req, res, next) => {
     const {authorization} = req.headers;
     if (!authorization) return res.status(401).send({error: 'Not Authorized'});
 
-    const user = await findUserBySessionId(authorization);
+    try {
+        const user = await findUserBySessionId(authorization);
 
-    delete user.password;
-    delete user._id;
-    
-    req.user = user;
-    req.sessionId = authorization;
-    next();
+        delete user.password;
+        delete user._id;
+
+        req.user = user;
+        req.sessionId = authorization;
+        next();
+    } catch (e) {
+        console.log('error auth', e);
+        return res.status(401).send({error: 'Not Authorized'});
+    }
 };
 
-
 const createUser = async ({ name, email, password, birthday, gender, photo }) => {
-    const newUser = {
+    let newUser = {
         name,
         email,
         password: hash(password),
@@ -41,37 +45,54 @@ const createUser = async ({ name, email, password, birthday, gender, photo }) =>
         photo
     };
 
+    if(photo) {
+        const photoId = await savePhoto(photo);
+        newUser = {...newUser, photo: photoId};
+    }
+
     const { insertedId } = await users.collection("users").insertOne(newUser);
 
     return { ...newUser, id: insertedId.toString() };
 };
 
 const updateUser = async (data) => {
-    const newUser = {...data, password: hash(data.newPassword)};
+    let newUser = {...data};
+
+    if(data.newPassword) {
+        newUser = {...newUser, password: hash(data.newPassword)};
+        delete newUser.newPassword;
+    }
+
+    if(data.newPhoto) {
+        if(data.photo) await deletePhoto(data.photo);
+        const photoId = await savePhoto(data.newPhoto);
+        delete newUser.newPhoto;
+        newUser = {...newUser, photo: photoId};
+    }
 
     delete newUser.email;
-    delete newUser.newPassword;
 
     const { value: user } = await users.collection('users').findOneAndUpdate({email: data.email}, {$set: newUser}, {returnDocument: 'after'});
 
     return user;
 }
 
-const findUserByEmail = async (email) => await users.collection("users").findOne({email}).catch(console.log);
+const findUserByEmail = async (email) => await users.collection("users").findOne({email})
+;
 
 const findUserById = async id => await users.collection('users').findOne({_id: new ObjectId(id)});
 
 const findUserBySessionId = async jwt => {
-    console.log(jwt)
+
     const session = await users.collection('sessions').findOne({sessionId: jwt});
-    console.log('session', session)
+
     return await findUserById(session.userId);
 }
 
 const createSession = async (id) => {
 
     const userAuth = await getSessionByUserId(id);
-    console.log(userAuth)
+
     if(userAuth) return userAuth.sessionId;
 
     const sessionId = jwt.sign(id, SECRET_KEY);
@@ -85,5 +106,15 @@ const deleteSession = async jwt => await users.collection('sessions').deleteOne(
 
 const getAllUsers = async () => await users.collection('users').find({}).toArray();
 
+const savePhoto = async (photo) => {
+    const { insertedId } = await users.collection('photo').insertOne({photo});
 
-module.exports = {createUser, findUserByEmail, createSession, hash, getSessionByUserId, deleteSession, getAllUsers, auth, updateUser};
+    return insertedId.toString();
+};
+
+const getPhoto = async photoId => await users.collection('photo').findOne({_id: ObjectId(photoId)});
+
+const deletePhoto = async photoId => await users.collection('photo').findOneAndDelete({_id: ObjectId(photoId)});
+
+
+module.exports = {createUser, findUserByEmail, createSession, hash, getSessionByUserId, deleteSession, getAllUsers, auth, updateUser, savePhoto, getPhoto};
