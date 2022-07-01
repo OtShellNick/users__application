@@ -129,3 +129,4 @@ modules.xml
 package-lock.json
 pomodoro-react.iml
 # End of https://www.toptal.com/developers/gitignore/api/webstorm,react
+.env
