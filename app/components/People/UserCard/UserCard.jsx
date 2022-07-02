@@ -20,7 +20,7 @@ const UserCard = ({user}) => {
         {photo && <img className='card__photo' src={photo} alt="user photo"/>}
         <div className='card__content'>
             <h2 className='card__heading'>{user.name}</h2>
-            {user.birthday && <span className='card__text'>{moment(user.birthday).fromNow(true)}</span>}
+            <span>{user.gender.split('').map((letter, index) => index === 0 ? letter.toUpperCase() : letter).join('')}</span>{user.birthday && <span className='card__text'>{", " + moment(user.birthday).fromNow(true)}</span>}
         </div>
     </div>
 }
