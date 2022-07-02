@@ -1,8 +1,8 @@
 const path = require('path');
-const webpack = require('webpack');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 const { NODE_ENV } = process.env;
 const IsDev = NODE_ENV === 'development';
@@ -53,6 +53,10 @@ const plugins = () => [
     template: './app/index.html'
   }),
   new CleanWebpackPlugin(),
+  new FaviconsWebpackPlugin({
+    logo: path.resolve(__dirname, './app/assets/favicon.svg'),
+    prefix: 'icons-[fullhash]/',
+  }),
   new MiniCssExtractPlugin({
     filename: filename('css'),
   }),
